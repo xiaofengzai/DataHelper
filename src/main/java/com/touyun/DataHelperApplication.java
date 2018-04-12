@@ -2,6 +2,8 @@ package com.touyun;
 
 import com.touyun.service.StoreInfoService;
 import com.touyun.thread.CodeDistributeThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +17,7 @@ import java.util.concurrent.Executor;
 @EnableAutoConfiguration
 @EnableAsync
 public class DataHelperApplication {
-
+    private final static Logger logger = LoggerFactory.getLogger(DataHelperApplication.class);
     public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(DataHelperApplication.class, args);
         StoreInfoService storeInfoService=SpringUtil.getBean(StoreInfoService.class);
@@ -36,5 +38,7 @@ public class DataHelperApplication {
 
         }
         latch.await();
+        logger.info("OK");
+
     }
 }
