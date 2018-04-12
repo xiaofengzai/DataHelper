@@ -1,25 +1,31 @@
-package com.touyun;
-
+import com.touyun.DataHelperApplication;
+import com.touyun.core.DataService;
+import com.touyun.core.HttpService;
 import com.touyun.service.StoreInfoService;
 import com.touyun.thread.CodeDistributeThread;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
-@SpringBootApplication
-@EnableAutoConfiguration
-@EnableAsync
-public class DataHelperApplication {
+/**
+ * Created by wenfeng on 2018/4/12.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = DataHelperApplication.class)
+public class StoreLocationUpdateTest {
+    @Autowired
+    private StoreInfoService storeInfoService;
+    @Autowired
+    private Executor executor;
 
-    public static void main(String[] args) throws InterruptedException {
-        SpringApplication.run(DataHelperApplication.class, args);
-        StoreInfoService storeInfoService=SpringUtil.getBean(StoreInfoService.class);
-        Executor executor=SpringUtil.getBean(Executor.class);
+    @Test
+    public void mapApiTest() throws InterruptedException {
         Integer batchSize=10;
         List<String> codeList=storeInfoService.getCodeList();
         Integer threadSize=codeList.size()/batchSize;

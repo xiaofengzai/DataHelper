@@ -2,22 +2,16 @@ package com.touyun;
 
 import com.touyun.service.StoreInfoService;
 import com.touyun.thread.CodeDistributeThread;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
-@SpringBootApplication
-@EnableAutoConfiguration
-@EnableAsync
-public class DataHelperApplication {
-
+/**
+ * Created by wenfeng on 2018/4/12.
+ */
+public class DateHelper {
     public static void main(String[] args) throws InterruptedException {
-        SpringApplication.run(DataHelperApplication.class, args);
         StoreInfoService storeInfoService=SpringUtil.getBean(StoreInfoService.class);
         Executor executor=SpringUtil.getBean(Executor.class);
         Integer batchSize=10;
