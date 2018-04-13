@@ -67,7 +67,7 @@ public class GetStoreInfoTask implements Runnable {
             param.put("city",code);
             String address= StringUtils.join(addressList, Constant.ADDRESS_SEPERATOR);
             param.put("address",address);
-            List<String> locations=storeInfoService.getLoactionList(param);
+            List<String> locations=storeInfoService.getLocationList(param);
             setLocationInfo(data.size(),data,locations);
         }
     }
