@@ -1,5 +1,6 @@
 import com.touyun.DataHelperApplication;
 import com.touyun.SqlTemplate;
+import com.touyun.config.DatasourceTypeEnum;
 import com.touyun.model.StoreInfo;
 import com.touyun.model.User;
 import com.touyun.core.DataService;
@@ -30,7 +31,7 @@ public class DataServiceTest {
     public void dataTest(){
         //getStoreIds();
         //batchUpdateTest();
-        Integer count=dataService.getCount(SqlTemplate.STORE_COUNT_BY_CODE,Integer.class,new Object[]{"330200"});
+        Integer count=dataService.getCount(DatasourceTypeEnum.Secondary,SqlTemplate.STORE_COUNT_BY_CODE,Integer.class,new Object[]{"330200"});
         System.out.println(count);
     }
 

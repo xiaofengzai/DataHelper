@@ -1,5 +1,7 @@
 package com.touyun.core;
 
+import com.touyun.config.DatasourceTypeEnum;
+import com.touyun.config.JdbcTemplateProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,7 +17,7 @@ import java.util.Map;
 @Service
 public class DataService {
    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplateProvider jdbcTemplateProvider;
 
     /**
      * 批量更新
@@ -25,7 +27,11 @@ public class DataService {
      * @param <T>
      */
     public <T> void batchUpdate(String pattern, List<T> data, ParameterizedPreparedStatementSetter<T> parameterizedPreparedStatementSetter){
-        jdbcTemplate.batchUpdate(pattern,data,data.size(),parameterizedPreparedStatementSetter);
+       batchUpdate(null,pattern,data,parameterizedPreparedStatementSetter);
+    }
+
+    public <T> void batchUpdate(DatasourceTypeEnum datasourceTypeEnum,String pattern, List<T> data, ParameterizedPreparedStatementSetter<T> parameterizedPreparedStatementSetter){
+        jdbcTemplateProvider.getJdbcTemplate(datasourceTypeEnum).batchUpdate(pattern,data,data.size(),parameterizedPreparedStatementSetter);
     }
 
     public void batchInsert(String tableName){
@@ -41,11 +47,18 @@ public class DataService {
      * @return
      */
     public <T> List<T> selectList(String sql, Class<T> clazz, RowMapper<T> rowMapper){
-      return   jdbcTemplate.query(sql,rowMapper);
+        return   selectList(null,sql,clazz,rowMapper);
+    }
+
+    public <T> List<T> selectList(DatasourceTypeEnum datasourceTypeEnum,String sql, Class<T> clazz, RowMapper<T> rowMapper){
+      return   jdbcTemplateProvider.getJdbcTemplate(datasourceTypeEnum).query(sql,rowMapper);
     }
 
     public <T> List<T> selectList(String sql,Object[] args, Class<T> clazz, RowMapper<T> rowMapper){
-        return   jdbcTemplate.query(sql,args,rowMapper);
+        return selectList(null,sql,args,clazz,rowMapper);
+    }
+    public <T> List<T> selectList(DatasourceTypeEnum datasourceTypeEnum,String sql,Object[] args, Class<T> clazz, RowMapper<T> rowMapper){
+        return   jdbcTemplateProvider.getJdbcTemplate(datasourceTypeEnum).query(sql,args,rowMapper);
     }
 
 
@@ -57,8 +70,13 @@ public class DataService {
      * @param <T>
      * @return
      */
+
     public <T> List<T> selectList(String sql,Class<T> clazz,String columnName){
-        List<T> result=jdbcTemplate.query(sql, new RowMapper<T>() {
+        return selectList(null,sql,clazz,columnName);
+    }
+
+    public <T> List<T> selectList(DatasourceTypeEnum datasourceTypeEnum,String sql,Class<T> clazz,String columnName){
+        List<T> result=jdbcTemplateProvider.getJdbcTemplate(datasourceTypeEnum ).query(sql, new RowMapper<T>() {
             @Override
             public T mapRow(ResultSet resultSet, int i) throws SQLException {
                     return (T)resultSet.getString(columnName);
@@ -72,7 +90,11 @@ public class DataService {
     }
 
     public <T> T getCount(String sql,Class<T> clazz,Object[] param){
-        return jdbcTemplate.queryForObject(sql,param,clazz);
+        return  getCount(null,sql,clazz,param);
+    }
+
+    public <T> T getCount(DatasourceTypeEnum datasourceTypeEnum,String sql,Class<T> clazz,Object[] param){
+        return jdbcTemplateProvider.getJdbcTemplate(datasourceTypeEnum).queryForObject(sql,param,clazz);
     }
 
 
