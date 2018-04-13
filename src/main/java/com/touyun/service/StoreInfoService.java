@@ -6,7 +6,6 @@ import com.touyun.SqlTemplate;
 import com.touyun.core.DataService;
 import com.touyun.core.HttpService;
 import com.touyun.model.StoreInfo;
-import org.apache.tomcat.util.digester.ArrayStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class StoreInfoService {
         });
     }
 
-    public List<String> getLoactionList(Map<String,String> param){
+    public List<String> getLocationList(Map<String,String> param){
         JsonNode root=httpService.getRequest(Constant.mapApiUrl, JsonNode.class,param);
         List<String> list=new ArrayList<>();
         try {
@@ -61,10 +60,16 @@ public class StoreInfoService {
                 if(children==null ||children.size()==0)
                     return list;
                 children.stream().forEach(a->{
-                    String location=a.findValue("location").asText();
-                    if(location.equals(Constant.NOT_FOUND_LOCATION))
-                        location="";
-                    list.add(location);
+                    JsonNode locationNode=a.findValue("location");
+                    if(locationNode==null){
+                        list.add("");
+                    }else {
+                        String location=locationNode.asText("");
+                        if(location.equals(Constant.NOT_FOUND_LOCATION)){
+                            location="";
+                        }
+                        list.add(location);
+                    }
                 });
             }else{
                 logger.error("请求异常");
@@ -100,7 +105,7 @@ public class StoreInfoService {
     }
 
     public void batchUpdateStoreInfo(List<StoreInfo> data){
-        dataService.batchUpdate(SqlTemplate.BACTH_UPDATE_STORE_INFO,data,new ParameterizedPreparedStatementSetter<StoreInfo>(){
+        dataService.batchUpdate(SqlTemplate.BATCH_UPDATE_STORE_INFO,data,new ParameterizedPreparedStatementSetter<StoreInfo>(){
 
             @Override
             public void setValues(PreparedStatement preparedStatement, StoreInfo storeInfo) throws SQLException {
