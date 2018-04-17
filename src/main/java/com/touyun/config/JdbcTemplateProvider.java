@@ -18,6 +18,8 @@ public class JdbcTemplateProvider {
     protected JdbcTemplate secondaryJdbcTemplate;
 
     public JdbcTemplate getJdbcTemplate(DatasourceTypeEnum datasourceTypeEnum){
+        if(datasourceTypeEnum==null)
+            return primaryJdbcTemplate;
        switch (datasourceTypeEnum){
            case Secondary:
                return secondaryJdbcTemplate;

@@ -24,8 +24,8 @@ public class MapAPiTest {
     public void mapApiTest(){
         //?city="+city+"&address="+address+"&output=JSON&key="+
         Map<String,String> param=new HashMap<>();
-        param.put("city","440300");
-        param.put("address","广东省深圳市中城康桥花园南区a6栋广东省深圳市龙岗区中城康桥花园南区a6栋7号|深圳世界之窗|深圳大学|sfsfsfsd,.gsdgdsgmdsgmdlgmdgmdgm");
+       // param.put("city","310300");
+        param.put("address","无锡市南长区金星苑58-102");
         param.put("output","JSON");
         param.put("batch","true");
         param.put("key", Constant.mapAppKey);

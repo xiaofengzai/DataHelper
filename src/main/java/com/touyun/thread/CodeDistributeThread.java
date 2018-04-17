@@ -23,7 +23,7 @@ public class CodeDistributeThread implements Runnable {
     public void run() {
         logger.info(name+"--start,code:"+codes.size());
         codes.stream().forEach(a->{
-            executor.execute(new GetStoreInfoTask(a,storeInfoService,name+"-sub"));
+            executor.execute(new GetStoreInfoTask(a,storeInfoService,executor,name+"-sub"));
             SleepUtil.sleep(5000);
         });
         logger.info(name+"--end"+codes.size());

@@ -41,14 +41,35 @@ public class StoreInfoService {
         return dataService.selectList(sql, new Object[]{code, start, step}, StoreInfo.class, new RowMapper<StoreInfo>() {
             @Override
             public StoreInfo mapRow(ResultSet resultSet, int i) throws SQLException {
-                String id = resultSet.getString("storeId");
-                String address = resultSet.getString("storeAddress");
-                StoreInfo storeInfo = new StoreInfo();
-                storeInfo.setStoreId(id);
-                storeInfo.setStoreAddress(address);
-                return storeInfo;
+                return makeStoreInfo(resultSet);
             }
         });
+    }
+    public List<StoreInfo> getAllStoreInfoList(String sql,String code){
+        return dataService.selectList(sql, new Object[]{code}, StoreInfo.class, new RowMapper<StoreInfo>() {
+            @Override
+            public StoreInfo mapRow(ResultSet resultSet, int i) throws SQLException {
+                return makeStoreInfo(resultSet);
+            }
+        });
+    }
+
+    public List<StoreInfo> getStoreInfoListWithoutCityId(String sql){
+        return dataService.selectList(sql, new Object[]{}, StoreInfo.class, new RowMapper<StoreInfo>() {
+            @Override
+            public StoreInfo mapRow(ResultSet resultSet, int i) throws SQLException {
+                return makeStoreInfo(resultSet);
+            }
+        });
+    }
+
+    private StoreInfo makeStoreInfo(ResultSet resultSet) throws SQLException {
+        String id = resultSet.getString("storeId");
+        String address = resultSet.getString("storeAddress");
+        StoreInfo storeInfo = new StoreInfo();
+        storeInfo.setStoreId(id);
+        storeInfo.setStoreAddress(address);
+        return storeInfo;
     }
 
     public List<String> getLocationList(Map<String,String> param){
